@@ -30,19 +30,20 @@ app.get('/sign-up', (req, res) => {
 })
 
 app.get('/tweets', (req, res) => {
-    const posts = tweets.length
-    console.log(serverUsers)
-    if (posts <= 10) {
-        res.send(tweets)
+
+    const posts = []
+    console.log(tweets)
+    console.log(tweets.length)
+    if (tweets.length > 10) {
+        
+        for(let i = 0; i < 10; i++){
+            posts.push(tweets[i])
+        }
+
+        res.send(posts)
+
     } else {
-
-        const lastTen = tweets.map((i, index) => {
-            while (index !== 11) {
-                return i
-            }
-        });
-
-        res.send(lastTen)
+        res.send(tweets)
     }
 })
 

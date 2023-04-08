@@ -30,27 +30,55 @@ app.get('/sign-up', (req, res) => {
 })
 
 app.get('/tweets', (req, res) => {
-    res.send(tweets)
+    const posts = tweets.length
+    console.log(serverUsers)
+    if (posts <= 10) {
+        res.send(tweets)
+    } else {
+
+        const lastTen = tweets.map((i, index) => {
+            while (index !== 11) {
+                return i
+            }
+        });
+
+        res.send(lastTen)
+    }
 })
 
 app.post('/tweets', (req, res) => {
-    const { username, tweet } = req.body
 
-    if(serverUsers.length === 0){
+    const { username, tweet } = req.body
+    let avatar = ""
+
+    if (tweet.length === 0 || username.length === 0) {  //validações
+        res.send("os campos vazios não são aceitos ")
+    }
+
+    if (serverUsers.length === 0) {
         return res.send("UNAUTHORIZED")
     }
 
     for (let i = 0; i < serverUsers.length; i++) {
-        
+
         if (!serverUsers[i].username) {
             return res.send("UNAUTHORIZED")
         }
 
+    }                                                   //validações
+
+    for (let i = 0; i < serverUsers.length; i++) {
+
+        if (serverUsers[i].username === username){
+            avatar = serverUsers[i].avatar
+        }
+
     }
-    
+
     tweets.push(
         {
             username,
+            avatar,
             tweet
         }
     )
